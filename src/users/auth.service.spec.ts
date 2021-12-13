@@ -54,28 +54,24 @@ describe('AuthService', () => {
     expect(hash).toBeDefined();
   });
 
-  it('thows an error if users signs up with emal that is in use', async () => {
-    fakeUserService.find = () =>
-      Promise.resolve([{ id: 1, email: 'sdfsf', password: 'sdfsdf' } as User]);
+  it('thows an error if users signs up with email that is in use', async () => {
+    await service.signup('hola@test.com', '123');
 
     await expect(() =>
       service.signup('hola@test.com', '123'),
     ).rejects.toThrow();
   });
 
-  it('throws if signin is called with an unsed email', async () => {
+  it('throws if signin is called with an unused email', async () => {
     await expect(
       service.signin('testsadf@test.com', '123123'),
     ).rejects.toThrow();
   });
 
-  it('throws if an ivalid password is proveided', async () => {
-    fakeUserService.find = () =>
-      Promise.resolve([
-        { id: 1, email: 'test@test.com', password: 'password.hasshed' } as User,
-      ]);
+  it('throws if an ivalid password is provided', async () => {
+    await service.signup('test@test.com', '123');
 
-    await expect(service.signin('test@test.com', '123')).rejects.toThrow();
+    await expect(service.signin('test@test.com', '1234')).rejects.toThrow();
   });
 
   it('returns a user if correct password is provided', async () => {
