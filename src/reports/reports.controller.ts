@@ -4,6 +4,8 @@ import { CreateReportDto } from './dtos/create-report.dto';
 import { ReportsService } from './reports.service';
 import { CurrentUser } from '../users/decorators/current-user.decorator';
 import { User } from '../users/user.entity';
+import { Serialize } from 'src/interceptors/serialize.interceptor';
+import { ReportDto } from './dtos/report.dto';
 
 @Controller('reports')
 export class ReportsController {
@@ -11,6 +13,7 @@ export class ReportsController {
 
   @Post()
   @UseGuards(AuthGuard)
+  @Serialize(ReportDto)
   createReport(
     @Body() body: CreateReportDto,
     @CurrentUser() currentUser: User,
